@@ -8,18 +8,17 @@ import vonage
 from tkinter import messagebox
 
 
-# Funkcja do sprawdzenia, czy adres e-mail jest poprawny
 def czy_poprawny_email(adres):
     regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
     return re.match(regex, adres) is not None
 
 
-# Funkcja do sprawdzenia, czy numer telefonu ma 9 cyfr
+
 def czy_poprawny_numer(numer):
     return numer.isdigit() and len(numer) == 9
 
 
-# Funkcja do sprawdzenia, czy wartość jest liczbą zmiennoprzecinkową
+
 def is_float(s):
     try:
         float(s)
@@ -28,7 +27,7 @@ def is_float(s):
         return False
 
 
-# Funkcja do wysłania e-maila potwierdzającego
+#E-mail potwierdzający
 def wyslij_potwierdzenie_email(adres_potwierdzenia, address, keyword, tracking_link):
     if not czy_poprawny_email(adres_potwierdzenia):
         messagebox.showerror(title='ERROR!!!', message=f"Adres e-mail potwierdzenia {adres_potwierdzenia} jest nieprawidłowy.")
@@ -61,7 +60,7 @@ def wyslij_potwierdzenie_email(adres_potwierdzenia, address, keyword, tracking_l
         messagebox.showerror(title='ERROR!!!', message=f'Błąd podczas wysyłania potwierdzenia do {adres_potwierdzenia}: {str(e)}')
 
 
-# Funkcja do wysłania wiadomości e-mail
+#Wysłania wiadomości e-mail
 def send_email(keyword, address, tracking_link, kwota_pobrania=None):
     if not czy_poprawny_email(address):
         messagebox.showerror(title='ERROR!!!', message=f"Skup się, to nie takie trudne :D, Adres e-mail {address} jest nieprawidłowy.")
@@ -194,7 +193,7 @@ def send_email(keyword, address, tracking_link, kwota_pobrania=None):
         messagebox.showerror(title='ERROR!!!', message=f'Błąd podczas wysyłania e-maila do {address}: {str(e)}')
 
 
-# Funkcja do wysłania wiadomości SMS
+#Wysłanie SMS
 def send_sms(number, message):
     if not czy_poprawny_numer(number):
         messagebox.showerror(title='ERROR!!!', message=f"Numer telefonu {number} jest nieprawidłowy.")
@@ -216,15 +215,15 @@ def send_sms(number, message):
         messagebox.showerror(title='ERROR!!!', message=f"Błąd: {responseData['messages'][0]['error-text']}")
 
 
-# Funkcja obsługująca przycisk wysyłania wiadomości e-mail i SMS
+#E-mail i SMS
 def on_send_all():
     keyword = keyword_entry.get()
     address = email_entry.get()
     number = phone_entry.get()
     tracking_link = tracking_link_entry.get()
     kwota_pobrania = kwota_entry.get() if keyword in ('drzwipobranie', 'wniesieniepobranie', 'pocztapobranie') else None
-    adres_potwierdzenia = 'mn@dotd.pl'  # Stały adres e-mail do potwierdzeniamn
-    numer_potwierdzenia = '532888999'  # Stały numer telefonu do potwierdzenia
+    adres_potwierdzenia = 'mn@dotd.pl'  #Stały adres e-mail do potwierdzeniamn
+    numer_potwierdzenia = '532888999'  #Stały numer telefonu do potwierdzenia
 
     send_email(keyword, address, tracking_link, kwota_pobrania)
     wyslij_potwierdzenie_email(adres_potwierdzenia, address, keyword, tracking_link)
@@ -236,12 +235,11 @@ def on_send_all():
     send_sms(numer_potwierdzenia,
              f'Potwierdzenie wyslania wiadomosci na nr: {number}')
 
-
-# Tworzenie głównego okna GUI
+#GUI
 root = tk.Tk()
 root.title("Wysyłanie e-maili i SMS")
 
-# Tworzenie i układanie widżetów GUI
+
 tk.Label(root, text="Słowo kluczowe").grid(row=0, column=0)
 keyword_entry = tk.Entry(root)
 keyword_entry.grid(row=0, column=1)
@@ -271,5 +269,5 @@ tk.Label(root, text="wniesieniepobranie").grid(row=5, column=4)
 tk.Label(root, text="             ").grid(row=6, column=3)
 tk.Button(root, text="Wyślij wszystko", command=on_send_all).grid(row=5, column=0, columnspan=2)
 
-# Uruchomienie głównej pętli GUI
+
 root.mainloop()
